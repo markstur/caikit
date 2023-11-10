@@ -17,6 +17,7 @@ from . import (
     classification,
     embedding_vectors,
     package,
+    reranker,
     sentence_similarity,
     text,
     text_generation,
@@ -33,6 +34,7 @@ from .classification import (
 )
 from .embedding_vectors import EmbeddingResult
 from .package import NLP_PACKAGE
+from .reranker import RerankPredictions, RerankQueryResult, RerankScore
 from .sentence_similarity import SentenceListScores, SentenceScores
 from .text import Token, TokenizationResults, TokenizationStreamResult
 from .text_generation import (
