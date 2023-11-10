@@ -17,6 +17,7 @@ from typing import List, Optional
 
 # Local
 from caikit.core import DataObjectBase, dataobject
+from caikit.core.data_model import JsonDict
 from typing import Dict
 
 # Type hints for JSON serializable dicts
@@ -35,7 +36,7 @@ from typing import Dict
 class RerankScore(DataObjectBase):
     """The score for one document (one query)"""
 
-    document: Optional[Dict[str, str]]
+    document: Optional[JsonDict]
     index: int
     score: float
     text: Optional[str]
