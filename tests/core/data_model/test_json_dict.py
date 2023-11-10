@@ -50,7 +50,15 @@ def test_dict_to_struct_to_dict():
     assert struct.fields["null_val"].WhichOneof("kind") == "null_value"
     assert struct.fields["null_val"].null_value == struct_pb2.NullValue.NULL_VALUE
     print(type(struct.fields["list_val"].list_value))
+    print(struct.fields["list_val"].list_value.__class__)
+    print(struct.fields["list_val"].list_value.__class__.__qualname__)
+    print(struct.fields["list_val"].list_value.__class__.__module__)
+    print(struct.fields["list_val"].list_value.__class__.__name__)
     print(type(struct_pb2.ListValue()))
+    print(struct_pb2.ListValue.__class__)
+    print(struct_pb2.ListValue.__class__.__qualname__)
+    print(struct_pb2.ListValue.__class__.__module__)
+    print(struct_pb2.ListValue.__class__.__name__)
     assert isinstance(struct.fields["list_val"].list_value, struct_pb2.ListValue)
     assert len(struct.fields["list_val"].list_value.values) == len(raw_dict["list_val"])
     assert isinstance(struct.fields["dict_val"].struct_value, struct_pb2.Struct)
