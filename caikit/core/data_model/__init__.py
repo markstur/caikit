@@ -17,7 +17,7 @@
 """
 
 # Local
-from . import base, data_backends, enums, producer, protobufs
+from . import base, data_backends, enums, json_dict, producer, protobufs
 from .base import DataBase
 from .dataobject import (
     CAIKIT_DATA_MODEL,
@@ -26,6 +26,7 @@ from .dataobject import (
     render_dataobject_protos,
 )
 from .enums import *
+from .json_dict import JsonDict
 from .producer import PACKAGE_COMMON, ProducerId
 from .streams import data_stream
 from .streams.data_stream import *

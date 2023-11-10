@@ -17,7 +17,6 @@ from . import (
     classification,
     embedding_vectors,
     package,
-    reranker,
     sentence_similarity,
     text,
     text_generation,
