@@ -16,7 +16,7 @@ name: Build and Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "markstur-ci", "main" ]
   pull_request:
     branches: [ "main" ]
 
