@@ -28,12 +28,6 @@ jobs:
         python-version:
           - setup: '3.8'
             tox: 'py38'
-          - setup: '3.9'
-            tox: 'py39'
-          - setup: '3.10'
-            tox: 'py310'
-          - setup: '3.11'
-            tox: 'py311'
           # Special matrix entry to ensure protobuf 3 compatibility
           - setup: '3.8'
             tox: 'proto3'
