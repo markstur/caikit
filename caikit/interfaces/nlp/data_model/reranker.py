@@ -27,16 +27,15 @@ RerankerJsonDictValue = Union[
     bool,
     type(None),
     List["RerankerJsonDictValue"],
-    "RerankerJsonDict",
+    Dict[str, "RerankerJsonDictValue"]
 ]
-RerankerJsonDict = Dict[str, RerankerJsonDictValue]
 
 
 @dataobject(package="caikit_data_model.caikit_nlp")
 class RerankScore(DataObjectBase):
     """The score for one document (one query)"""
 
-    document: Optional[RerankerJsonDict]
+    document: Optional[Dict[str, RerankerJsonDictValue]]
     index: int
     score: float
     text: Optional[str]
