@@ -46,6 +46,7 @@ def dict_to_struct(
         struct_class = struct_pb2.Struct
         value_class = struct_pb2.Value
         list_value_class = struct_pb2.ListValue
+        print("LIST VALUE CLASS PB2 = ", list_value_class)
     else:
         if value_class is None:
             value_class = _get_message_class(
@@ -59,6 +60,8 @@ def dict_to_struct(
                     "google.protobuf.ListValue"
                 )
             )
+            print("LIST VALUE CLASS = ", list_value_class)
+    print("FINALLY LIST VALUE CLASS = ", list_value_class)
 
     return struct_class(
         fields={
