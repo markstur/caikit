@@ -49,6 +49,8 @@ def test_dict_to_struct_to_dict():
     )
     assert struct.fields["null_val"].WhichOneof("kind") == "null_value"
     assert struct.fields["null_val"].null_value == struct_pb2.NullValue.NULL_VALUE
+    print(type(struct.fields["list_val"]))
+    print("---")
     print(type(struct.fields["list_val"].list_value))
     print(struct.fields["list_val"].list_value.__class__)
     print(struct.fields["list_val"].list_value.__class__.__qualname__)

@@ -48,6 +48,7 @@ def dict_to_struct(
         list_value_class = struct_pb2.ListValue
         print("LIST VALUE CLASS PB2 = ", list_value_class)
     else:
+        print("ELS LIST VALUE CLASS = ", list_value_class)
         if value_class is None:
             value_class = _get_message_class(
                 struct_class.DESCRIPTOR.file.pool.FindMessageTypeByName(
@@ -97,7 +98,9 @@ def _value_to_struct_value(value, struct_class, value_class, list_value_class):
                 list_value_class=list_value_class,
             )
         )
-    elif isinstance(value, list):
+    elif isinstance(value, (list, List)):
+        print("LVC: list_value_class:", list_value_class)
+        print("VC: value_class:", value_class)
         struct_value = value_class(
             list_value=list_value_class(
                 values=(
