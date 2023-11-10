@@ -17,25 +17,26 @@ from typing import List, Optional
 
 # Local
 from caikit.core import DataObjectBase, dataobject
-from typing import Dict, Union
+from caikit.core.data_model import JsonDictValue
+from typing import Dict
 
 # Type hints for JSON serializable dicts
-RerankerJsonDictValue = Union[
-    int,
-    float,
-    str,
-    bool,
-    type(None),
-    List["RerankerJsonDictValue"],
-    Dict[str, "RerankerJsonDictValue"]
-]
+# JsonDictValue = Union[
+    # int,
+    # float,
+    # str,
+    # bool,
+    # type(None),
+    # List[JsonDictValue],
+    # Dict[str, JsonDictValue]
+# ]
 
 
 @dataobject(package="caikit_data_model.caikit_nlp")
 class RerankScore(DataObjectBase):
     """The score for one document (one query)"""
 
-    document: Optional[Dict[str, RerankerJsonDictValue]]
+    document: Optional[Dict[str, JsonDictValue]]
     index: int
     score: float
     text: Optional[str]
