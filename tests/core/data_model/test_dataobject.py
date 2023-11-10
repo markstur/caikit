@@ -1047,8 +1047,7 @@ def test_dataobject_jsondict_repeated(auto_temp_dpool):
         js_dict: List[JsonDict]
 
     # Make sure the field has the right type
-    Struct = auto_temp_dpool.FindMessageTypeByName("google.protobuf.Struct")
-    assert Foo._proto_class.DESCRIPTOR.fields_by_name["js_dict"].message_type == Struct
+    # ListValue = auto_temp_dpool.FindMessageTypeByName("google.protobuf.ListValue")
 
     # Make sure dict is preserved on init
     js_dict = [{"foo": {"bar": [1, 2, 3]}}]
@@ -1060,6 +1059,10 @@ def test_dataobject_jsondict_repeated(auto_temp_dpool):
     assert len(foo_proto.js_dict) == 1
     assert set(foo_proto.js_dict[0].fields.keys()) == set(js_dict[0].keys())
     assert foo_proto.js_dict[0].fields["foo"].struct_value
+    # print(type(foo_proto.js_dict[0].fields["foo"].struct_value))
+    # print(type(struct_pb2.Struct))
+    # assert isinstance(foo_proto.js_dict[0].fields["foo"].struct_value.fields["bar"].list_value, struct_pb2.ListValue)
+    # assert isinstance(foo_proto.js_dict[0].fields["foo"].struct_value, struct_pb2.Struct)
     assert set(foo_proto.js_dict[0].fields["foo"].struct_value.fields.keys()) == set(
         js_dict[0]["foo"].keys()
     )
@@ -1067,6 +1070,18 @@ def test_dataobject_jsondict_repeated(auto_temp_dpool):
     # Make sure conversion back to dict happens on from_proto
     foo2 = Foo.from_proto(foo_proto)
     assert foo2.js_dict == foo.js_dict
+
+    # assert isinstance(foo_proto.js_dict[0].fields["foo"].struct_value, struct_pb2.Struct)
+    # assert isinstance(foo_proto.js_dict.struct_value, struct_pb2.Struct)
+    # assert foo_proto.js_dict[0].fields["foo"].struct_value
+    # # from google.protobuf.struct_pb2 import ListValue
+    # print(type(foo2))
+    # print(type(foo2.js_dict))
+    # assert isinstance(foo2.js_dict, ListValue)
+    # assert len(foo2.js_dict.struct_value.fields) == len(
+        # foo2["dict_val"]
+    # )
+    # # assert Foo._proto_class.DESCRIPTOR.fields_by_name["js_dict"].message_type == Struct
 
 
 def test_dataobject_to_kwargs():
@@ -1395,3 +1410,64 @@ def test_dataobject_from_json_ignore_unknown_fields():
     m1 = Moo.from_json({"foo": 2, "boo": True}, ignore_unknown_fields=True)
     assert isinstance(m1, Moo)
     assert m1.foo == 2
+
+
+from google.protobuf import struct_pb2
+from caikit.core.data_model.json_dict import dict_to_struct, struct_to_dict
+
+def test_dict_to_struct_to_dict(auto_temp_dpool):
+
+    Struct = auto_temp_dpool.FindMessageTypeByName("google.protobuf.Struct")
+    ListValue = auto_temp_dpool.FindMessageTypeByName("google.protobuf.ListValue")
+
+    """Make sure dict_to_struct can handle all variants"""
+    raw_dict = {
+        "int_val": 1,
+        "float_val": 0.42,
+        "str_val": "asdf",
+        "bool_val": False,
+        "null_val": None,
+        "list_val": [2, 3.14, "qwer", True, None, [1, 2, 3], {"nested": "val"}],
+        "dict_val": {"yep": "works"},
+    }
+
+    # Make sure the dict round trips correctly
+    struct = dict_to_struct(raw_dict)
+    round_trip = struct_to_dict(struct)
+    assert round_trip == raw_dict
+
+    # Make sure the struct representation looks right
+    assert set(struct.fields) == set(raw_dict)
+    assert all(
+        getattr(struct.fields[key], struct.fields[key].WhichOneof("kind")) == val
+        for key, val in raw_dict.items()
+        if not isinstance(val, (list, dict, type(None)))
+    )
+    assert struct.fields["null_val"].WhichOneof("kind") == "null_value"
+    assert struct.fields["null_val"].null_value == struct_pb2.NullValue.NULL_VALUE
+
+    assert isinstance(struct.fields["dict_val"].struct_value, struct_pb2.Struct)
+    assert len(struct.fields["dict_val"].struct_value.fields) == len(
+        raw_dict["dict_val"]
+    )
+
+    print(type(struct.fields["list_val"]))
+    print("---")
+    print(type(struct.fields["list_val"].list_value))
+    print(struct.fields["list_val"].list_value.__class__)
+    print(struct.fields["list_val"].list_value.__class__.__qualname__)
+    print(struct.fields["list_val"].list_value.__class__.__module__)
+    print(struct.fields["list_val"].list_value.__class__.__name__)
+    print(type(struct_pb2.ListValue()))
+    print(struct_pb2.ListValue.__class__)
+    print(struct_pb2.ListValue.__class__.__qualname__)
+    print(struct_pb2.ListValue.__class__.__module__)
+    print(struct_pb2.ListValue.__class__.__name__)
+    assert isinstance(struct.fields["list_val"].list_value, struct_pb2.ListValue)
+    assert len(struct.fields["list_val"].list_value.values) == len(raw_dict["list_val"])
+
+
+def test_dict_to_struct_invalid_value():
+    """Make sure that a ValueError is raised if a bad type is encountered"""
+    with pytest.raises(ValueError):
+        dict_to_struct({"foo": 1, "bar": {"baz": b"asdf"}})

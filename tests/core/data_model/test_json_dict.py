@@ -23,6 +23,15 @@ import pytest
 from caikit.core.data_model.json_dict import dict_to_struct, struct_to_dict
 
 
+from tests.data_model_helpers import reset_global_protobuf_registry
+
+@pytest.fixture(autouse=True)
+def auto_reset_global_protobuf_registry():
+    """Reset the global registry of generated protos"""
+    with reset_global_protobuf_registry():
+        yield
+
+
 def test_dict_to_struct_to_dict():
     """Make sure dict_to_struct can handle all variants"""
     raw_dict = {
@@ -49,6 +58,12 @@ def test_dict_to_struct_to_dict():
     )
     assert struct.fields["null_val"].WhichOneof("kind") == "null_value"
     assert struct.fields["null_val"].null_value == struct_pb2.NullValue.NULL_VALUE
+
+    assert isinstance(struct.fields["dict_val"].struct_value, struct_pb2.Struct)
+    assert len(struct.fields["dict_val"].struct_value.fields) == len(
+        raw_dict["dict_val"]
+    )
+
     print(type(struct.fields["list_val"]))
     print("---")
     print(type(struct.fields["list_val"].list_value))
@@ -63,10 +78,6 @@ def test_dict_to_struct_to_dict():
     print(struct_pb2.ListValue.__class__.__name__)
     assert isinstance(struct.fields["list_val"].list_value, struct_pb2.ListValue)
     assert len(struct.fields["list_val"].list_value.values) == len(raw_dict["list_val"])
-    assert isinstance(struct.fields["dict_val"].struct_value, struct_pb2.Struct)
-    assert len(struct.fields["dict_val"].struct_value.fields) == len(
-        raw_dict["dict_val"]
-    )
 
 
 def test_dict_to_struct_invalid_value():
