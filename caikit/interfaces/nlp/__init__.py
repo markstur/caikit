@@ -13,4 +13,4 @@
 # limitations under the License.
 
 # Local
-from . import data_model, embedding_tasks, sentence_similarity_task, tasks
+from . import data_model, sentence_similarity_task, tasks
