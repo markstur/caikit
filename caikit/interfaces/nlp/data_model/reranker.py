@@ -17,7 +17,6 @@ from typing import List, Optional
 
 # Local
 from caikit.core import DataObjectBase, dataobject
-from caikit.core.data_model import JsonDictValue
 from typing import Dict
 
 # Type hints for JSON serializable dicts
@@ -35,6 +34,8 @@ from typing import Dict
 @dataobject(package="caikit_data_model.caikit_nlp")
 class RerankScore(DataObjectBase):
     """The score for one document (one query)"""
+
+    from caikit.core.data_model import JsonDictValue
 
     document: Optional[Dict[str, JsonDictValue]]
     index: int
