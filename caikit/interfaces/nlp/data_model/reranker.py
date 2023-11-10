@@ -17,14 +17,14 @@ from typing import List, Optional
 
 # Local
 from caikit.core import DataObjectBase, dataobject
-from caikit.core.data_model.json_dict import JsonDict
+from typing import Dict
 
 
 @dataobject(package="caikit_data_model.caikit_nlp")
 class RerankScore(DataObjectBase):
     """The score for one document (one query)"""
 
-    document: Optional[JsonDict]
+    document: Optional[Dict]
     index: int
     score: float
     text: Optional[str]
