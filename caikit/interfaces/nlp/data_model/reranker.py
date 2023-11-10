@@ -35,9 +35,7 @@ from typing import Dict
 class RerankScore(DataObjectBase):
     """The score for one document (one query)"""
 
-    from caikit.core.data_model import JsonDictValue
-
-    document: Optional[Dict[str, JsonDictValue]]
+    document: Optional[Dict[str, str]]
     index: int
     score: float
     text: Optional[str]
