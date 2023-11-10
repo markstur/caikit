@@ -13,19 +13,18 @@
 # limitations under the License.
 
 # Standard
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 # Local
 from .package import NLP_PACKAGE
 from caikit.core import DataObjectBase, dataobject
-from caikit.core.data_model import JsonDict
 
 
 @dataobject(package=NLP_PACKAGE)
 class RerankScore(DataObjectBase):
     """The score for one document (one query)"""
 
-    document: Optional[JsonDict]
+    document: Optional[Dict[str, str]]
     index: int
     score: float
     text: Optional[str]
