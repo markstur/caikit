@@ -42,10 +42,9 @@ class RerankQueryResult(DataObjectBase):
     scores: List[RerankScore]
 
 
-@dataobject(package=NLP_PACKAGE)
-class RerankPredictions(DataObjectBase):
-    """Result for a rerank tasks (supporting multiple queries).
-    For multiple queries, each one has a RerankQueryResult (ranking the documents for that query).
-    """
-
-    results: List[RerankQueryResult]
+# @dataobject(package=NLP_PACKAGE)
+# class RerankPredictions(DataObjectBase):
+    # """Result for a rerank tasks (supporting multiple queries).
+    # For multiple queries, each one has a RerankQueryResult (ranking the documents for that query).
+    # """
+    # results: List[RerankQueryResult]
