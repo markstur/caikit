@@ -39,6 +39,7 @@ class SamplePrimitiveModule(caikit.core.ModuleBase):
         str_type: str = "moose",
         bytes_type: bytes = b"",
         list_type: List[str] = None,
+        list_dicts: List[JsonDict] = None,
     ) -> SampleOutputType:
         """This takes in a bunch of primitive types to ensure that we can pass those through the runtime server correctly."""
         assert isinstance(bool_type, bool)
