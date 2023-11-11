@@ -65,7 +65,7 @@ def test_dict_to_struct_to_dict():
     )
 
     print(type(struct.fields["list_val"]))
-    print("---")
+    print("-----")
     print(type(struct.fields["list_val"].list_value))
     print(struct.fields["list_val"].list_value.__class__)
     print(struct.fields["list_val"].list_value.__class__.__qualname__)
