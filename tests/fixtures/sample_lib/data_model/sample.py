@@ -10,7 +10,7 @@ import zipfile
 
 # Local
 from caikit.core import DataObjectBase, TaskBase, dataobject, task
-from caikit.core.data_model import ProducerId
+from caikit.core.data_model import ProducerId, JsonDict
 from caikit.interfaces.common.data_model import File
 
 
@@ -27,6 +27,18 @@ class SampleListInputType(DataObjectBase):
     """A sample list input type for this library"""
 
     inputs: List[SampleInputType]
+
+
+@dataobject(package="caikit_data_model.sample_lib")
+class SampleJsonDictInputType(DataObjectBase):
+
+    jd: JsonDict
+
+
+@dataobject(package="caikit_data_model.sample_lib")
+class SampleJsonDictListInputType(DataObjectBase):
+
+    inputs: List[JsonDict]
 
 
 @dataobject(package="caikit_data_model.sample_lib")
