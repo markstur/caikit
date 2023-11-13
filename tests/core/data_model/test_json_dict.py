@@ -21,9 +21,25 @@ import pytest
 
 # Local
 from caikit.core.data_model.json_dict import dict_to_struct, struct_to_dict
+from tests.data_model_helpers import reset_global_protobuf_registry, temp_dpool
 
 
-def test_dict_to_struct_to_dict():
+@pytest.fixture(autouse=True)
+def auto_temp_dpool():
+    """Fixture to isolate the descriptor pool used in each test"""
+    with temp_dpool() as dpool:
+        yield dpool
+
+
+@pytest.fixture(autouse=True)
+def auto_reset_global_protobuf_registry():
+    """Reset the global registry of generated protos"""
+    with reset_global_protobuf_registry():
+        yield
+
+
+
+def test_dict_to_struct_to_dict(auto_temp_dpool):
     """Make sure dict_to_struct can handle all variants"""
     raw_dict = {
         "int_val": 1,
@@ -51,9 +67,17 @@ def test_dict_to_struct_to_dict():
     assert struct.fields["null_val"].null_value == struct_pb2.NullValue.NULL_VALUE
     # FIXME: For proto3 the class module does not match (see below)
     # assert isinstance(struct.fields["list_val"].list_value, struct_pb2.ListValue)
-    assert len(struct.fields["list_val"].list_value.values) == len(raw_dict["list_val"])
+    # Make sure the field has the right type
+    ListValue = auto_temp_dpool.FindMessageTypeByName("google.protobuf.ListValue")
+    assert struct._proto_class.DESCRIPTOR.fields_by_name["list_val"].message_type == ListValue
+
+    assert len(struct.fields[""].list_value.values) == len(raw_dict["list_val"])
     # FIXME: For proto3 the class module does not match (see below)
     # assert isinstance(struct.fields["dict_val"].struct_value, struct_pb2.Struct)
+    # FIX? Make sure the field has the right type
+    Struct = auto_temp_dpool.FindMessageTypeByName("google.protobuf.Struct")
+    assert struct._proto_class.DESCRIPTOR.fields_by_name["dict_val"].message_type == Struct
+
     assert len(struct.fields["dict_val"].struct_value.fields) == len(
         raw_dict["dict_val"]
     )
