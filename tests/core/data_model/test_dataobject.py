@@ -101,6 +101,7 @@ def test_dataobject_bytes():
     f2 = Foo.from_json(f1.to_json())
     assert f2.foo == f1.foo
     assert f2.to_json() == f1.to_json()
+    assert f1.__class__.__module__ == f2.__class__.__module__
 
 
 def test_dataobject_bytes_union():
