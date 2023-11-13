@@ -16,7 +16,7 @@ name: Build and Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "do_test" ]
   pull_request:
     branches: [ "main" ]
 
